@@ -1,6 +1,7 @@
 # nvim-cow-commenter
-
 A NeoVim plugin for toggling comments in code.
+
+![nvim-cow-commenter-video-medium](https://github.com/user-attachments/assets/b8ee4ca8-ebb7-400c-9785-e2427f09fcc9)
 
 ## Why
 I didn't like the comment toggle plugins I was using because it used keybindings I used else where and felt to large with multiple features.
