@@ -20,16 +20,24 @@ local ToggleComments = function (args)
 	local lines = vim.fn.getline(line_start, line_end)
 
 	if fileTypes[fileType] then
-		local indicator = fileTypes[fileType] .. " "
+		local indicator = fileTypes[fileType]
 		local indicatorLen = string.len(indicator)
+		local firstCharI = string.find(lines[1], "%S") or 1
+		local lineFirstChars = string.sub(lines[1], firstCharI, firstCharI+indicatorLen-1)
 
-		local lineFirstChars = string.sub(lines[1], 1, indicatorLen)
 		if (lineFirstChars == indicator) then
 			local lineNumber = line_start
 			for _,line in pairs(lines) do
-				local isLineCommented = string.sub(line, 1, indicatorLen) == indicator
-				if isLineCommented then
-					vim.fn.setline(lineNumber, string.sub(line, (indicatorLen+1)))
+				local charI = string.find(line, "%S") or 1
+				if (charI >= 1) then
+					local isLineCommented = string.sub(line, charI, charI+indicatorLen-1) == indicator
+					if isLineCommented then
+						if (charI == 1) then
+							vim.fn.setline(lineNumber, string.sub(line, (indicatorLen+1)))
+						elseif (charI > 1) then
+							vim.fn.setline(lineNumber, string.sub(line, 1, charI-1)..string.sub(line, (charI + indicatorLen)))
+						end
+					end
 				end
 				lineNumber = lineNumber + 1
 			end
