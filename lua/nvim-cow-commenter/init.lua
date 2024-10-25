@@ -4,6 +4,12 @@ local function setup(settings)
 	fileTypes = settings.filetypes
 end
 
+function insert_at(str, insert_str, index)
+    local start = string.sub(str, 1, index - 1)
+    local ending = string.sub(str, index)
+    return start .. insert_str .. ending
+end
+
 local ToggleComments = function (args)
 	local fileType = vim.bo.filetype
 	if (args.line1 == nil or args.line2 == nil) then
@@ -44,7 +50,10 @@ local ToggleComments = function (args)
 		else
 			local lineNumber = line_start
 			for _,line in pairs(lines) do
-				vim.fn.setline(lineNumber, (indicator .. line))
+				local charI = string.find(line, "%S") or 1
+				local newLine = insert_at(line, indicator, charI)
+				vim.fn.setline(lineNumber, newLine)
+
 				lineNumber = lineNumber + 1
 			end
 		end
